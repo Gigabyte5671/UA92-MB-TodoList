@@ -84,6 +84,9 @@ export default defineComponent({
 		<li>
 			<button @click="removeItem()">Remove</button>
 		</li>
+		<li>
+			<button @click="removeItem()">Duplicate</button>
+		</li>
 	</ul>
 
 	<ol
