@@ -32,7 +32,7 @@ export default defineComponent({
 		addItem() {
 			this.todoList.push({
 				title: 'Default',
-				date: '2023-02-18',
+				date: new Date().toDateString(),
 				description: 'Hello World!',
 				colour: '',
 				selected: false
