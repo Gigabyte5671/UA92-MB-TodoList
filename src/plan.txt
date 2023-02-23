@@ -1,0 +1,7 @@
+1. On handle click, prevent other interactions.
+2. On handle drag, move the selected list item with the cursor.
+2B.      "         show a visual indication that we are moving the item.
+3. When dragged up, swap places with the item above.
+4. When dragged down, swap places with the item below.
+5. On handle release, drop the item into whichever slot it is currently above.
+6. Re-enable other interactions.
