@@ -67,7 +67,7 @@ li {
 	padding: 0.7ch 0.7ch 2ch;
 	background-color: white;
 	border-radius: 0.5rem;
-	box-shadow: 0px 3px 20px -7px #000;
+	box-shadow: 0px 3px 20px -7px hsl(140, 72%, 44%);
 	cursor: grab;
 }
 
