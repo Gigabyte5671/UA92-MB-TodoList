@@ -65,7 +65,7 @@ li {
 	gap: 1ch;
 	margin-bottom: 1rem;
 	padding: 0.7ch 0.7ch 2ch;
-	background-color: rgb(173, 134, 134);
+	background-color: rgb(122, 204, 245);
 	border-radius: 0.5rem;
 	box-shadow: 0px 3px 20px -7px hsl(140, 72%, 44%);
 	cursor: grab;
