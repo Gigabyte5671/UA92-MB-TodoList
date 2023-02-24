@@ -31,7 +31,7 @@ export default defineComponent({
 	methods: {
 		addItem() {
 			this.todoList.push({
-				title: 'Default',
+				title: 'Untitled',
 				date: new Date().toDateString(),
 				description: 'Hello World!',
 				colour: '',
