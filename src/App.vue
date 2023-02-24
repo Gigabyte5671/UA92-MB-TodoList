@@ -25,18 +25,20 @@ export default defineComponent({
 				y: 0,
 				offsetX: 0,
 				offsetY: 0
-			}
+			},
+			newItemCounter: 1
 		};
 	},
 	methods: {
 		addItem() {
 			this.todoList.push({
-				title: 'Default',
+				title: `Untitled ${this.newItemCounter}`,
 				date: new Date().toDateString(),
 				description: 'Hello World!',
 				colour: '',
 				selected: false
 			});
+			this.newItemCounter++;
 		},
 		removeItem() {
 			this.todoList = this.todoList.filter(item => !item.selected);
