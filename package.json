@@ -12,6 +12,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "firebase": "^9.17.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {
