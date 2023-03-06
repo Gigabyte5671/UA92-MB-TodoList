@@ -1,6 +1,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import ListItem from './components/ListItem.vue';
+import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
+import type { User } from "firebase/auth";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { auth, database } from './main';
+
+const provider = new GoogleAuthProvider();
 
 interface Item {
 	title: string,
@@ -26,7 +32,8 @@ export default defineComponent({
 				offsetX: 0,
 				offsetY: 0
 			},
-			newItemCounter: 1
+			newItemCounter: 1,
+			user: undefined as User | undefined
 		};
 	},
 	methods: {
@@ -57,21 +64,60 @@ export default defineComponent({
 		dragMove(event: MouseEvent) {
 			this.dragPosition.x = event.x - this.dragPosition.offsetX;
 			this.dragPosition.y = event.y - this.dragPosition.offsetY;
-		}
-	},
-	watch: {
-		todoList: {
-			handler(newValue) {
-				window.localStorage.setItem(
-					'todoList',
-					JSON.stringify(newValue)
-				);
-			},
-			deep: true
+		},
+		login(): void {
+			signInWithPopup(auth, provider)
+				.then((result) => {
+					// This gives you a Google Access Token. You can use it to access the Google API.
+					const credential = GoogleAuthProvider.credentialFromResult(result);
+					const token = credential?.accessToken;
+					// The signed-in user info.
+					this.user = result.user;
+					// IdP data available using getAdditionalUserInfo(result)
+					// ...
+				}).catch((error) => {
+					// Handle Errors here.
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					// The email of the user's account used.
+					const email = error.customData.email;
+					// The AuthCredential type that was used.
+					const credential = GoogleAuthProvider.credentialFromError(error);
+					// ...
+					console.warn('Sign in failed:', error.code, error.message);
+				});
+		},
+		logout(): void {
+			signOut(auth)
+				.then(() => {
+					// Sign-out successful.
+					this.user = undefined;
+				}).catch((error) => {
+					// An error happened.
+					console.warn('Sign out failed:', error);
+				});
 		}
 	},
 	mounted() {
-		this.todoList = JSON.parse(window.localStorage.getItem('todoList') ?? '[]');
+		onAuthStateChanged(auth, async (user) => {
+			if (user) {
+				this.user = user;
+				const queryReference = await getDocs(collection(database, this.user.uid));
+				queryReference.forEach((doc) => {
+					const data = doc.data();
+					this.todoList.push({
+						title: data.title,
+						date: data.date,
+						description: data.description,
+						colour: data.colour,
+						selected: false
+					});
+					this.newItemCounter++;
+				});
+			} else {
+				// Logged out.
+			}
+		});
 	}
 });
 </script>
@@ -88,6 +134,12 @@ export default defineComponent({
 		</li>
 		<li>
 			<button @click="removeItem()">Duplicate</button>
+		</li>
+		<li v-if="user">
+			<button @click="logout()">Logout</button>
+		</li>
+		<li v-else>
+			<button @click="login()">Login</button>
 		</li>
 	</ul>
 
